@@ -1,5 +1,6 @@
 import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
 import {Recipe} from '../../recipes.model';
+import {RecipesService} from "../../recipes.service";
 
 @Component({
   selector: 'app-recipe-item',
@@ -14,12 +15,12 @@ import {Recipe} from '../../recipes.model';
         <p class="list-group-item-text">{{ recipe.description }}</p>
       </div>
       <span class="pull-right">
-    <img
-      [src]="recipe.imagePath"
-      alt="{{ recipe.name }}"
-      class="img-responsive"
-      style="max-height: 50px">
-  </span>
+        <img
+          [src]="recipe.imagePath"
+          alt="{{ recipe.name }}"
+          class="img-responsive"
+          style="max-height: 50px">
+      </span>
     </a>
 
   `,
@@ -27,12 +28,11 @@ import {Recipe} from '../../recipes.model';
 })
 export class RecipeItemComponent implements OnInit {
   @Input() recipe: Recipe;
-  @Output() recipeSelected = new EventEmitter<void>();
-  constructor() { }
+  constructor(private recipeServices: RecipesService) { }
 
   ngOnInit(): void {
   }
   onSelect(): void {
-    this.recipeSelected.emit();
+    this.recipeServices.recipeSelected.emit(this.recipe);
   }
 }

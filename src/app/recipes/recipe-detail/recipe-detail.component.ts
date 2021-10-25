@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Recipe} from '../recipes.model';
+import {RecipesService} from "../recipes.service";
 
 @Component({
   selector: 'app-recipe-detail',
@@ -27,7 +28,7 @@ import {Recipe} from '../recipes.model';
             Manage Recipe <span class="caret"></span>
           </button>
           <ul class="dropdown-menu">
-            <li><a href="">To Shopping List</a></li>
+            <li><a (click)="onAddToShoppingList()">To Shopping List</a></li>
             <li><a href="">Edit Recipe</a></li>
             <li><a href="">Delete Recipe</a></li>
           </ul>
@@ -41,7 +42,11 @@ import {Recipe} from '../recipes.model';
     </div>
     <div class="row">
       <div class="col-xs-12">
-        Ingredients
+        <ul class="list-group">
+          <li class="list-group-item" *ngFor="let ingredient of recipe.ingredients">
+            {{ ingredient.name }} - {{ ingredient.amount }}
+          </li>
+        </ul>
       </div>
     </div>
   `,
@@ -50,9 +55,13 @@ import {Recipe} from '../recipes.model';
 export class RecipeDetailComponent implements OnInit {
   @Input() recipe: Recipe;
 
-  constructor() { }
+  constructor(private recipeService: RecipesService) { }
 
   ngOnInit(): void {
+  }
+
+  onAddToShoppingList() {
+    this.recipeService.addIngredientToShoppingList(this.recipe.ingredients);
   }
 
 }

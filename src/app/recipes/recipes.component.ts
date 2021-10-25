@@ -1,12 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {Recipe} from './recipes.model';
+import {RecipesService} from './recipes.service';
 
 @Component({
   selector: 'app-recipes',
   template: `
     <div class="row">
       <div class="col-md-5">
-        <app-recipe-list (recipeWasSelected)="selectedRecipe = $event"></app-recipe-list>
+        <app-recipe-list></app-recipe-list>
       </div>
       <div class="col-md-7">
         <app-recipe-detail
@@ -18,12 +19,19 @@ import {Recipe} from './recipes.model';
       </div>
     </div>
   `,
-  styleUrls: ['./recipes.component.css']
+  styleUrls: ['./recipes.component.css'],
+  providers: [RecipesService]
 })
 export class RecipesComponent implements OnInit{
   selectedRecipe: Recipe;
-  constructor() {
+  constructor(private recipeService: RecipesService) {
   }
   ngOnInit(): void {
+    this.recipeService.recipeSelected
+      .subscribe(
+        (recipe: Recipe) => {
+          this.selectedRecipe = recipe;
+        }
+      );
   }
 }
